@@ -1,23 +1,21 @@
-local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
+local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/WindUI.lua"))()
 
 local Window = WindUI:CreateWindow({
-
     Title = "Luther's Playground",
-
-    Icon = "door-open",
+    Icon = "zap",
     Author = "by Luther",
-    Folder = "CloudHub",
+    Folder = "LutherHUB",
     Size = UDim2.fromOffset(580, 460),
     Transparent = true,
     Theme = "Dark",
     User = {
-        Enabled = true, -- <- or false
+        Enabled = false, -- <- or false
         Callback = function() print("clicked") end, -- <- optional
         Anonymous = false -- <- or true
     },
     SideBarWidth = 200,
     HasOutline = true,
-    KeySystem = { -- <- keysystem enabled
+        KeySystem = { -- <- keysystem enabled
         Key = { "1234", "5678" },
         Note = "Example Key System. \n\nThe Key is '1234' or '5678",
         URL = "https://github.com/Footagesus/WindUI", -- remove this if the key is not obtained from the link.
@@ -25,8 +23,7 @@ local Window = WindUI:CreateWindow({
     },
 })
 
---Function Info
-local Info = Window:Tab({Title = "Information", Icon = "info" })
+local Info = Window:Tab({ Title = "Information", Icon = "info" })
 
 local InviteCode = "XErAwERk"
 local DiscordAPI = "https://discord.com/api/v10/invites/" .. InviteCode .. "?with_counts=true&with_expiration=true"
@@ -107,56 +104,9 @@ else
     })
 end
 
---Function Tab
 local Tabs = {
     Main = Window:Tab({ Title = "Main", Icon = "toggle-left", Desc = "Switch settings on and off." }),
     Auto = Window:Tab({ Title = "Automation", Icon = "shopping-cart" }),
     Shops = Window:Tab({ Title = "Shop", Icon = "door-open" }),
     Misc = Window:Tab({ Title = "Misc", Icon = "folder" }),
 }
-
---Function Main
-Tabs.Main:Section({ Title = "Fishing" })
-
-Tabs.Main:Toggle({
-    Title = "Auto Fish",
-    Value = false,
-    Callback = function(state) print("Auto Fish: " .. tostring(state)) end
-})
-
-Tabs.Main:Toggle({
-    Title = "Auto Equip Rod",
-    Value = false,
-    Callback = function(state) print("Auto Equip Rod:" .. tostring(state)) end
-})
-
-Tabs.Main:Toggle({
-    Title = "Auto Perfect",
-    Value = false,
-    Callback = function(state) print("Auto Perfect:" .. tostring(state)) end
-})
-
-Tabs.Main:Dropdown({
-    Title = "Fishing Mode",
-    Values = { "Legit", "Blatant", "Super Blatant" },
-    Value = "Legit",
-    Callback = function(option) print("Selected: " .. option) end
-})
-
-Tabs.Main.Section({ Title = "Fishing Spot" })
-
-Tabs.Main:Dropdown({
-    Title = "Select Spot",
-    Values = { "Fisherman Island", "Ocean", "Weather Machine", "Kohana Volcano","Kohana", "Crater Island", "Coral Reefs", "Esoteric Depths", "Snow Island", "Sacred Temple", "Sishypus Statue", "Lost Isle", "Ancient Temple", },
-    Value = "Fisherman Island",
-    Callback = function(open) print("Selected: " .. option) end
-})
-
-Tabs.Main:Button({
-    Title = "Teleport To Selected",
-    Desc = "Teleport",
-    Callback
-     = function() print("Button Clicked") end
-})
-
---Main Tab
