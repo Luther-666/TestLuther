@@ -106,9 +106,10 @@ else
         Color = "Red",
     })
 end
-Window:Divider()
+
 --Function Tab
 local Tabs = {
+    divider1 = Window:Divider()
     Main = Window:Tab({ Title = "Main", Icon = "toggle-left", Desc = "Switch settings on and off." }),
     Auto = Window:Tab({ Title = "Automation", Icon = "shopping-cart" }),
     Shops = Window:Tab({ Title = "Shop", Icon = "door-open" }),
