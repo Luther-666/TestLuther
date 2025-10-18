@@ -104,8 +104,6 @@ else
     })
 end
 
-Window:Divider()
-
 local Tabs = {
     Main = Window:Tab({ Title = "Main", Icon = "toggle-left", Desc = "Switch settings on and off." }),
     Auto = Window:Tab({ Title = "Automation", Icon = "shopping-cart" }),
