@@ -165,11 +165,4 @@ Tabs.Main:Button({
 
 
 --Shop Tab
-Tabs.Shops:Section({ Title = "Purchase" })
 
-Tabs.Shops:Dropdown({
-    Title = "Select Rod",
-    Values = { "Starter Rod (50)", "Luck Rod (350)", "Carbon Rod (900)", "Grass Rod (1,500)", "Demascus Rod (3,000)", "Ice Rod (5,000)", "Lucky Rod (15,000)", "Midnight Rod (50,000)", "Steampunk Rod (215,000)", "Chrome Rod (437,000)", "Fluorescent Rod (715,000)", "Astral Rod (1,000,000)", "Ares Rod (3,000,000)", "Angler Rod (8,000,000)", "Bamboo Rod (12,000,000)", },
-    Value = 
-    Callback = 
-})
