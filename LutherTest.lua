@@ -106,7 +106,7 @@ else
         Color = "Red",
     })
 end
-
+Window:Divider()
 --Function Tab
 local Tabs = {
     Main = Window:Tab({ Title = "Main", Icon = "toggle-left", Desc = "Switch settings on and off." }),
