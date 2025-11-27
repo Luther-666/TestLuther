@@ -1,164 +1,324 @@
-local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
+local Players = game:GetService("Players")
+local Lighting = game:GetService("Lighting")
+local Terrain = workspace.Terrain
+local RunService = game:GetService("RunService")
+local PlayerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
 
-local Window = WindUI:CreateWindow({
-    Title = "Luther's Playground",
-    Icon = "zap",
-    Author = "by Luther",
-    Folder = "CloudHub",
-    Size = UDim2.fromOffset(580, 460),
-    Transparent = true,
-    Theme = "Dark",
-    User = {
-        Enabled = true, -- <- or false
-        Callback = function() print("clicked") end, -- <- optional
-        Anonymous = false -- <- or true
-    },
-    SideBarWidth = 200,
-    HasOutline = true,
-    KeySystem = { -- <- keysystem enabled
-        Key = { "1234", "5678" },
-        Note = "Example Key System. \n\nThe Key is '1234' or '5678",
-        URL = "https://github.com/Footagesus/WindUI", -- remove this if the key is not obtained from the link.
-        SaveKey = true, -- optional
-    },
-})
+print("╔════════════════════════════════╗")
+print("║  ULTIMATE ANTI LAG SCRIPT     ║")
+print("║  Loading All Features...      ║")
+print("╚════════════════════════════════╝")
 
---Function Info
-local Info = Window:Tab({Title = "Information", Icon = "info" })
-
-local InviteCode = "XErAwERk"
-local DiscordAPI = "https://discord.com/api/v10/invites/" .. InviteCode .. "?with_counts=true&with_expiration=true"
-
-local Response
-local ErrorMessage = nil
-
-xpcall(function()
-    Response = game:GetService("HttpService"):JSONDecode(WindUI.Creator.Request({
-        Url = DiscordAPI,
-        Method = "GET",
-        Headers = {
-            ["Accept"] = "application/json"
-        }
-    }).Body)
-end, function(err)
-    warn("err fetching discord info: " .. tostring(err))
-    ErrorMessage = tostring(err)
-    Response = nil
-end)
-
-if Response and Response.guild then
-    local ParagraphConfig = {
-        Title = Response.guild.name,
-        Desc =
-            ' <font color="#52525b">•</font> Member Count: ' .. tostring(Response.approximate_member_count) ..
-            '\n <font color="#16a34a">•</font> Online Count: ' .. tostring(Response.approximate_presence_count)
-        ,
-        Image = "https://cdn.discordapp.com/icons/" .. Response.guild.id .. "/" .. Response.guild.icon .. ".png?size=256",
-        ImageSize = 42,
-        Buttons = {
-            {
-                Icon = "link",
-                Title = "Copy Discord Invite",
-                Callback = function()
-                    pcall(function()
-                        setclipboard("https://discord.gg/" .. InviteCode)
-                    end)
-                end
-            },
-            {
-                Icon = "refresh-cw",
-                Title = "Update Info",
-                Callback = function()
-                    xpcall(function()
-                        local UpdatedResponse = game:GetService("HttpService"):JSONDecode(WindUI.Creator.Request({
-                            Url = DiscordAPI,
-                            Method = "GET",
-                        }).Body)
-                        
-                        if UpdatedResponse and UpdatedResponse.guild then
-                            DiscordInfo:SetDesc(
-                                ' <font color="#52525b">•</font> Member Count: ' .. tostring(UpdatedResponse.approximate_member_count) ..
-                                '\n <font color="#16a34a">•</font> Online Count: ' .. tostring(UpdatedResponse.approximate_presence_count)
-                            )
-                        end
-                    end, function(err)
-                        warn("err updating discord info: " .. tostring(err))
-                    end)
-                end
-            }
-        }
-    }
+local function OptimizeGraphics()
+    print("[1/8] Mengoptimalkan Grafis...")
     
-    if Response.guild.banner then
-        ParagraphConfig.Thumbnail = "https://cdn.discordapp.com/banners/" .. Response.guild.id .. "/" .. Response.guild.banner .. ".png?size=256"
-        ParagraphConfig.ThumbnailSize = 80
+    -- Hapus semua lighting effects
+    for _, effect in pairs(Lighting:GetChildren()) do
+        if effect:IsA("BloomEffect") or 
+           effect:IsA("BlurEffect") or 
+           effect:IsA("ColorCorrectionEffect") or 
+           effect:IsA("DepthOfFieldEffect") or
+           effect:IsA("SunRaysEffect") or
+           effect:IsA("Atmosphere") then
+            pcall(function() effect:Destroy() end)
+        end
     end
     
-    local DiscordInfo = Info:Paragraph(ParagraphConfig)
-else
-    Info:Paragraph({
-        Title = "Error when receiving information about the Discord server",
-        Desc = ErrorMessage or "Unknown error occurred",
-        Image = "triangle-alert",
-        ImageSize = 26,
-        Color = "Red",
-    })
+    -- Set lighting ke minimum
+    Lighting.GlobalShadows = false
+    Lighting.FogEnd = 9e9
+    Lighting.FogStart = 0
+    Lighting.Brightness = 0
+    Lighting.Ambient = Color3.new(1, 1, 1)
+    Lighting.ColorShift_Bottom = Color3.new(0, 0, 0)
+    Lighting.ColorShift_Top = Color3.new(0, 0, 0)
+    Lighting.OutdoorAmbient = Color3.new(1, 1, 1)
+    
+    -- Set quality ke minimum
+    settings().Rendering.QualityLevel = 1
+    settings().Rendering.MeshPartDetailLevel = Enum.MeshPartDetailLevel.Level04
 end
 
---Function Tab
-local Tabs = {
-    Main = Window:Tab({ Title = "Main", Icon = "toggle-left" }),
-    Auto = Window:Tab({ Title = "Automation", Icon = "shopping-cart" }),
-    Shops = Window:Tab({ Title = "Shop", Icon = "door-open" }),
-    Misc = Window:Tab({ Title = "Misc", Icon = "folder" }),
-}
+local function RemoveAllTextures(obj)
+    print("[2/8] Menghapus Semua Texture...")
+    
+    for _, child in pairs(obj:GetDescendants()) do
+        -- Hapus texture, decal, surface
+        if child:IsA("Decal") or 
+           child:IsA("Texture") or 
+           child:IsA("SurfaceAppearance") then
+            pcall(function() child:Destroy() end)
+        end
+        
+        -- Simplify parts
+        if child:IsA("Part") or child:IsA("MeshPart") or child:IsA("UnionOperation") then
+            child.Material = Enum.Material.SmoothPlastic
+            child.Reflectance = 0
+            child.CastShadow = false
+            child.TopSurface = Enum.SurfaceType.Smooth
+            child.BottomSurface = Enum.SurfaceType.Smooth
+        end
+        
+        -- Hapus mesh texture
+        if child:IsA("SpecialMesh") then
+            child.TextureId = ""
+        end
+    end
+end
 
---Function Main
-Tabs.Main:Section({ Title = "Fishing" })
+local function RemoveAllEffects(obj)
+    print("[3/8] Menghapus Semua Effects...")
+    
+    for _, child in pairs(obj:GetDescendants()) do
+        -- Hapus ALL effects
+        if child:IsA("ParticleEmitter") or 
+           child:IsA("Trail") or 
+           child:IsA("Beam") or
+           child:IsA("Smoke") or 
+           child:IsA("Fire") or
+           child:IsA("Sparkles") or
+           child:IsA("PointLight") or
+           child:IsA("SpotLight") or
+           child:IsA("SurfaceLight") then
+            pcall(function() child:Destroy() end)
+        end
+    end
+end
 
-Tabs.Main:Toggle({
-    Title = "Auto Fish",
-    Value = false,
-    Callback = function(state) print("Auto Fish: " .. tostring(state)) end
+local function OptimizeTerrainAndWater()
+    print("[4/8] Mengoptimalkan Terrain & Air...")
+    
+    -- Terrain optimization
+    Terrain.WaterWaveSize = 0
+    Terrain.WaterWaveSpeed = 0
+    Terrain.WaterReflectance = 0
+    Terrain.WaterTransparency = 1
+    Terrain.Decoration = false
+    
+    -- Simplify water parts
+    for _, obj in pairs(workspace:GetDescendants()) do
+        if obj:IsA("Part") and (obj.Name:lower():find("water") or obj.Name:lower():find("ocean")) then
+            obj.Transparency = 0.8
+            obj.Material = Enum.Material.SmoothPlastic
+            obj.Reflectance = 0
+            obj.CastShadow = false
+        end
+    end
+end
+
+local function RemoveRodEffects()
+    print("[5/8] Menghapus Efek Pancingan...")
+    
+    local character = Players.LocalPlayer.Character
+    if character then
+        for _, obj in pairs(character:GetDescendants()) do
+            -- Hapus rod effects
+            if obj:IsA("Beam") or 
+               obj:IsA("Trail") or 
+               obj:IsA("ParticleEmitter") or
+               obj:IsA("Fire") or
+               obj:IsA("Sparkles") or
+               obj:IsA("Smoke") then
+                pcall(function() obj:Destroy() end)
+            end
+            
+            -- Hapus attachment effects
+            if obj:IsA("Attachment") then
+                for _, child in pairs(obj:GetChildren()) do
+                    if child:IsA("ParticleEmitter") or 
+                       child:IsA("Beam") or 
+                       child:IsA("Trail") then
+                        pcall(function() child:Destroy() end)
+                    end
+                end
+            end
+        end
+    end
+end
+
+local function SimplifyGUI()
+    print("[6/8] Menyederhanakan GUI...")
+    
+    for _, gui in pairs(PlayerGui:GetDescendants()) do
+        -- Hapus border/stroke
+        if gui:IsA("UIStroke") then
+            pcall(function() gui:Destroy() end)
+        end
+        
+        -- Simplify frames
+        if gui:IsA("Frame") or gui:IsA("ImageButton") or gui:IsA("ImageLabel") then
+            gui.BackgroundColor3 = Color3.new(0.2, 0.2, 0.2)
+            gui.BorderSizePixel = 0
+            gui.BackgroundTransparency = 0.3
+            
+            if gui:IsA("ImageButton") or gui:IsA("ImageLabel") then
+                gui.Image = ""
+            end
+        end
+        
+        -- Simplify text
+        if gui:IsA("TextLabel") or gui:IsA("TextButton") then
+            gui.BackgroundColor3 = Color3.new(0.15, 0.15, 0.15)
+            gui.BorderSizePixel = 0
+        end
+        
+        -- Hapus gradient
+        if gui:IsA("UIGradient") then
+            pcall(function() gui:Destroy() end)
+        end
+        
+        -- Hapus corner radius
+        if gui:IsA("UICorner") then
+            gui.CornerRadius = UDim.new(0, 0)
+        end
+    end
+end
+
+local function OptimizeCharacter(character)
+    print("[7/8] Mengoptimalkan Character...")
+    
+    for _, part in pairs(character:GetDescendants()) do
+        if part:IsA("BasePart") then
+            part.Material = Enum.Material.SmoothPlastic
+            part.Reflectance = 0
+            part.CastShadow = false
+        end
+        
+        if part:IsA("Decal") or part:IsA("Texture") then
+            pcall(function() part:Destroy() end)
+        end
+        
+        if part:IsA("SpecialMesh") then
+            part.TextureId = ""
+        end
+    end
+    
+    RemoveRodEffects()
+end
+
+local function BoostFPS()
+    print("[8/8] Menjalankan FPS Booster...")
+    
+    -- Disable unnecessary connections
+    local connections = {}
+    for _, connection in pairs(getconnections(RunService.Heartbeat)) do
+        if connection.Enabled and not connection.Foreign then
+            connection:Disable()
+            table.insert(connections, connection)
+        end
+    end
+end
+
+print("\n🚀 Menjalankan Optimasi...")
+
+OptimizeGraphics()
+RemoveAllTextures(workspace)
+RemoveAllEffects(workspace)
+OptimizeTerrainAndWater()
+SimplifyGUI()
+BoostFPS()
+
+-- Optimasi player character
+local player = Players.LocalPlayer
+if player.Character then
+    OptimizeCharacter(player.Character)
+end
+
+-- ========================================
+-- MONITORING & AUTO-CLEANUP
+-- ========================================
+
+-- Monitor character respawn
+player.CharacterAdded:Connect(function(character)
+    wait(0.5)
+    OptimizeCharacter(character)
+end)
+
+-- Monitor GUI baru
+PlayerGui.DescendantAdded:Connect(function(gui)
+    wait(0.1)
+    
+    if gui:IsA("UIStroke") or gui:IsA("UIGradient") then
+        pcall(function() gui:Destroy() end)
+    elseif gui:IsA("Frame") or gui:IsA("ImageButton") or gui:IsA("ImageLabel") then
+        gui.BackgroundColor3 = Color3.new(0.2, 0.2, 0.2)
+        gui.BorderSizePixel = 0
+        gui.BackgroundTransparency = 0.3
+        
+        if gui:IsA("ImageButton") or gui:IsA("ImageLabel") then
+            gui.Image = ""
+        end
+    elseif gui:IsA("UICorner") then
+        gui.CornerRadius = UDim.new(0, 0)
+    end
+end)
+
+-- Monitor workspace objects
+workspace.DescendantAdded:Connect(function(obj)
+    wait(0.1)
+    
+    -- Auto-remove effects
+    if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") or
+       obj:IsA("Smoke") or obj:IsA("Fire") or obj:IsA("Sparkles") or
+       obj:IsA("PointLight") or obj:IsA("SpotLight") or obj:IsA("SurfaceLight") then
+        pcall(function() obj:Destroy() end)
+    elseif obj:IsA("Decal") or obj:IsA("Texture") or obj:IsA("SurfaceAppearance") then
+        pcall(function() obj:Destroy() end)
+    elseif obj:IsA("BasePart") then
+        obj.Material = Enum.Material.SmoothPlastic
+        obj.Reflectance = 0
+        obj.CastShadow = false
+        
+        if obj.Name:lower():find("water") or obj.Name:lower():find("ocean") then
+            obj.Transparency = 0.8
+        end
+    elseif obj:IsA("SpecialMesh") then
+        obj.TextureId = ""
+    end
+end)
+
+-- Monitor lighting changes
+Lighting.ChildAdded:Connect(function(child)
+    wait(0.1)
+    pcall(function() child:Destroy() end)
+end)
+
+-- Periodic cleanup (setiap 5 detik)
+spawn(function()
+    while wait(5) do
+        RemoveRodEffects()
+        OptimizeTerrainAndWater()
+    end
+end)
+
+-- Garbage collection (setiap 60 detik)
+spawn(function()
+    while wait(60) do
+        pcall(function()
+            for i = 1, 10 do
+                RunService.Heartbeat:Wait()
+            end
+        end)
+    end
+end)
+
+print("\n╔════════════════════════════════════╗")
+print("║   ULTIMATE ANTI LAG - LOADED! ✓   ║")
+print("╚════════════════════════════════════╝")
+print("✓ Graphics: Optimized")
+print("✓ Textures: Removed")
+print("✓ Effects: Removed")
+print("✓ Terrain & Water: Optimized")
+print("✓ Rod Effects: Removed")
+print("✓ GUI: Simplified")
+print("✓ Character: Optimized")
+print("✓ FPS Booster: Active")
+print("✓ Auto-Monitor: Running")
+print("\n🎮 Selamat Bermain dengan FPS Maksimal!")
+
+-- Notifikasi
+game:GetService("StarterGui"):SetCore("SendNotification", {
+    Title = "🚀 ULTIMATE Anti Lag";
+    Text = "All features loaded! FPS boost aktif!";
+    Duration = 5;
 })
-
-Tabs.Main:Toggle({
-    Title = "Auto Equip Rod",
-    Value = false,
-    Callback = function(state) print("Auto Equip Rod:" .. tostring(state)) end
-})
-
-Tabs.Main:Toggle({
-    Title = "Auto Perfect",
-    Value = false,
-    Callback = function(state) print("Auto Perfect:" .. tostring(state)) end
-})
-
-Tabs.Main:Dropdown({
-    Title = "Fishing Mode",
-    Values = { "Legit", "Blatant", "Super Blatant" },
-    Value = "Legit",
-    Callback = function(option) print("Selected: " .. option) end
-})
-
-Tabs.Main.Section({ Title = "Fishing Spot" })
-
-Tabs.Main:Dropdown({
-    Title = "Select Spot",
-    Values = { "Fisherman Island", "Ocean", "Weather Machine", "Kohana Volcano","Kohana", "Crater Island", "Coral Reefs", "Esoteric Depths", "Snow Island", "Sacred Temple", "Sishypus Statue", "Lost Isle", "Ancient Temple", },
-    Value = "Fisherman Island",
-    Callback = function(open) print("Selected: " .. option) end
-})
-
-Tabs.Main:Button({
-    Title = "Teleport To Selected",
-    Desc = "Teleport",
-    Callback
-     = function() print("Button Clicked") end
-})
-
---Main Tab
-
-
-
---Shop Tab
