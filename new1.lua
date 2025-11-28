@@ -7,11 +7,11 @@ if not _G.Ignore then
 end
 
 if _G.SendNotifications == nil then
-    _G.SendNotifications = true -- Set to false if you don't want notifications
+    _G.SendNotifications = false -- Set to false if you don't want notifications
 end
 
 if _G.ConsoleLogs == nil then
-    _G.ConsoleLogs = true -- Set to false to disable console logs
+    _G.ConsoleLogs = false -- Set to false to disable console logs
 end
 
 if not game:IsLoaded() then
@@ -26,8 +26,8 @@ end
 if not _G.Settings then
     _G.Settings = {
         Players = {
-            ["Ignore Me"] = true,
-            ["Ignore Others"] = true,
+            ["Ignore Me"] = false,
+            ["Ignore Others"] = false,
             ["Ignore Tools"] = true
         },
         Meshes = {
@@ -36,8 +36,8 @@ if not _G.Settings then
             Destroy = false
         },
         Images = {
-            Invisible = true,
-            Destroy = false
+            Invisible = false,
+            Destroy = true
         },
         Explosions = {
             Smaller = true,
@@ -59,13 +59,6 @@ if not _G.Settings then
             NoTexture = true,
             NoMesh = false,
             Destroy = false
-        },
-        GUI = {
-            RemoveBorders = true,
-            SimplifyColors = true,
-            RemoveStrokes = true,
-            RemoveGradients = true,
-            RemoveCorners = true
         },
         Lighting = {
             PersistentMode = true, -- PERSISTENT LIGHTING - Langit tetap abu-abu
@@ -105,7 +98,6 @@ local RunService = game:GetService("RunService")
 local Terrain = workspace:FindFirstChildOfClass("Terrain")
 
 local ME = Players.LocalPlayer
-local PlayerGui = ME:WaitForChild("PlayerGui")
 local CanBeEnabled = {"ParticleEmitter", "Trail", "Smoke", "Fire", "Sparkles", "Beam"}
 
 -- ========================================
@@ -284,7 +276,7 @@ local function OptimizeInstance(Inst)
         -- Water optimization
         if Inst.Name:lower():find("water") or Inst.Name:lower():find("ocean") then
             if _G.Settings.Water.LowQuality then
-                Inst.Transparency = 0.8
+                Inst.Transparency = 0.0
                 Inst.Material = Enum.Material.SmoothPlastic
                 Inst.Reflectance = 0
             end
@@ -331,28 +323,6 @@ local function OptimizeInstance(Inst)
         end
         if _G.Settings.MeshParts.Destroy then
             Inst:Destroy()
-        end
-        
-    -- GUI Optimization
-    elseif Inst:IsA("UIStroke") and _G.Settings.GUI.RemoveStrokes then
-        Inst:Destroy()
-        
-    elseif Inst:IsA("UIGradient") and _G.Settings.GUI.RemoveGradients then
-        Inst:Destroy()
-        
-    elseif Inst:IsA("UICorner") and _G.Settings.GUI.RemoveCorners then
-        Inst.CornerRadius = UDim.new(0, 0)
-        
-    elseif (Inst:IsA("Frame") or Inst:IsA("ImageButton") or Inst:IsA("ImageLabel")) and Inst:IsDescendantOf(PlayerGui) then
-        if _G.Settings.GUI.SimplifyColors then
-            Inst.BackgroundColor3 = Color3.new(0.2, 0.2, 0.2)
-            Inst.BackgroundTransparency = 0.3
-        end
-        if _G.Settings.GUI.RemoveBorders then
-            Inst.BorderSizePixel = 0
-        end
-        if (Inst:IsA("ImageButton") or Inst:IsA("ImageLabel")) and _G.Settings.Images.Invisible then
-            Inst.Image = ""
         end
     end
 end
@@ -575,6 +545,27 @@ if _G.Settings.Other["Remove Rod Effects"] then
     if _G.ConsoleLogs then
         warn("✓ Rod Effects Cleaner: Active")
     end
+end
+
+-- ========================================
+-- GARBAGE COLLECTION
+-- ========================================
+coroutine.wrap(function()
+    while task.wait(30) do -- 30 detik
+        pcall(function()
+            for i = 1, 10 do
+                RunService.Heartbeat:Wait()
+            end
+        end)
+        
+        if _G.ConsoleLogs then
+            warn("🗑️ Garbage collection cycle completed")
+        end
+    end
+end)()
+
+if _G.ConsoleLogs then
+    warn("✓ Garbage Collection: Active (every 30s)")
 end
 
 -- ========================================
