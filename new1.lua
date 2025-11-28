@@ -551,7 +551,7 @@ end
 -- GARBAGE COLLECTION
 -- ========================================
 coroutine.wrap(function()
-    while task.wait(30) do -- 30 detik
+    while task.wait(60) do -- 30 detik
         pcall(function()
             for i = 1, 10 do
                 RunService.Heartbeat:Wait()
