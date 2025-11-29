@@ -23,12 +23,12 @@ if not _G.Settings then
         Players = {
             ["Ignore Me"] = false,
             ["Ignore Others"] = false,
-            ["Ignore Tools"] = true
+            ["Ignore Tools"] = false
         },
         Meshes = {
             NoMesh = false,
-            NoTexture = true,
-            Destroy = false
+            NoTexture = false,
+            Destroy = true
         },
         Images = {
             Invisible = false,
@@ -36,24 +36,24 @@ if not _G.Settings then
         },
         Explosions = {
             Smaller = false,
-            Invisible = true, -- Not recommended for PVP games
-            Destroy = false -- Not recommended for PVP games
+            Invisible = false, -- Not recommended for PVP games
+            Destroy = true -- Not recommended for PVP games
         },
         Particles = {
-            Invisible = true,
-            Destroy = false
+            Invisible = false,
+            Destroy = true
         },
         TextLabels = {
-            LowerQuality = true,
+            LowerQuality = false,
             Invisible = false,
-            Destroy = false
+            Destroy = true
         },
         MeshParts = {
-            LowerQuality = true,
+            LowerQuality = false,
             Invisible = false,
             NoTexture = false,
             NoMesh = false,
-            Destroy = false
+            Destroy = true
         },
         Other = {
             ["FPS Cap"] = true, -- Set this true to uncap FPS
