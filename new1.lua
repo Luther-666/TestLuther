@@ -12,11 +12,11 @@ _G.Settings = _G.Settings or {
     LowQuality = true,           -- Parts, MeshParts, Models
     LowWater = true,             -- Water optimization
     LowRendering = true,         -- Graphics quality
-    FPSCap = true,               -- true = uncapped, number = cap
+    FPSCap = false,               -- true = uncapped, number = cap
     
-    IgnoreMe = false,            -- Optimize player sendiri?
-    IgnoreOthers = false,        -- Optimize player lain?
-    IgnoreTools = false           -- Jangan optimize tools
+    IgnoreMe = true,            -- Optimize player sendiri?
+    IgnoreOthers = true,        -- Optimize player lain?
+    IgnoreTools = true           -- Jangan optimize tools
 }
 
 if not game:IsLoaded() then
