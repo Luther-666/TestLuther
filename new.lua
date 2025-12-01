@@ -23,12 +23,12 @@ if not _G.Settings then
         Players = {
             ["Ignore Me"] = false,
             ["Ignore Others"] = false,
-            ["Ignore Tools"] = true
+            ["Ignore Tools"] = false
         },
         Meshes = {
             NoMesh = false,
-            NoTexture = true,
-            Destroy = false
+            NoTexture = false,
+            Destroy = true
         },
         Images = {
             Invisible = false,
@@ -45,20 +45,20 @@ if not _G.Settings then
         },
         TextLabels = {
             LowerQuality = false,
-            Invisible = true,
-            Destroy = false
+            Invisible = false,
+            Destroy = true
         },
         MeshParts = {
             LowerQuality = false,
             Invisible = true,
-            NoTexture = true,
+            NoTexture = false,
             NoMesh = false,
-            Destroy = false
+            Destroy = true
         },
         Other = {
             ["FPS Cap"] = true, -- Set this true to uncap FPS
             ["No Camera Effects"] = true,
-            ["No Clothes"] = false,
+            ["No Clothes"] = true,
             ["Low Water Graphics"] = true,
             ["No Shadows"] = true,
             ["Low Rendering"] = true,
