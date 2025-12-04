@@ -26,16 +26,16 @@ if not _G.Settings then
             ["Ignore Tools"] = true
         },
         Meshes = {
-            NoMesh = true,
-            NoTexture = false,
+            NoMesh = false,
+            NoTexture = true,
             Destroy = false
         },
         Images = {
             Invisible = false,
-            Destroy = falsd
+            Destroy = false
         },
         Explosions = {
-            Smaller = true,
+            Smaller = false,
             Invisible = false, -- Not recommended for PVP games
             Destroy = false -- Not recommended for PVP games
         },
@@ -44,13 +44,13 @@ if not _G.Settings then
             Destroy = false
         },
         TextLabels = {
-            LowerQuality = true,
+            LowerQuality = false,
             Invisible = false,
             Destroy = false
         },
         MeshParts = {
             LowerQuality = true,
-            Invisible = true,
+            Invisible = false,
             NoTexture = false,
             NoMesh = false,
             Destroy = false
