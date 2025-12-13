@@ -35,13 +35,13 @@ if not _G.Settings then
             Destroy = false
         },
         Explosions = {
-            Smaller = true,
+            Smaller = false,
             Invisible = false, -- Not recommended for PVP games
-            Destroy = false -- Not recommended for PVP games
+            Destroy = true -- Not recommended for PVP games
         },
         Particles = {
-            Invisible = true,
-            Destroy = false
+            Invisible = false,
+            Destroy = true
         },
         TextLabels = {
             LowerQuality = true,
@@ -51,9 +51,9 @@ if not _G.Settings then
         MeshParts = {
             LowerQuality = true,
             Invisible = false,
-            NoTexture = false,
+            NoTexture = true,
             NoMesh = false,
-            Destroy = falsd
+            Destroy = false
         },
         Other = {
             ["FPS Cap"] = true, -- Set this true to uncap FPS
