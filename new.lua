@@ -26,9 +26,9 @@ if not _G.Settings then
             ["Ignore Tools"] = true
         },
         Meshes = {
-            NoMesh = true,
+            NoMesh = false,
             NoTexture = false,
-            Destroy = false
+            Destroy = true
         },
         Images = {
             Invisible = true,
@@ -53,7 +53,7 @@ if not _G.Settings then
             Invisible = false,
             NoTexture = true,
             NoMesh = false,
-            Destroy = false
+            Destroy = true
         },
         Other = {
             ["FPS Cap"] = true, -- Set this true to uncap FPS
